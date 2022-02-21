@@ -10,6 +10,8 @@ if($ret_val==1){
     echo '</script>';
 }
 }
+$setores = pg_query("SELECT s.idsetor FROM public.setor s");
+$filiais = pg_query("SELECT f.idfilial FROM public.filial f");
 ?>
 <div class="container-fluid bg-3 text-center">    
   <h3>CRUD Exemplo</h3>
@@ -86,17 +88,35 @@ if($ret_val==1){
                </div>
             </div>
             <div class="panel-body">
-              <div class="form-group" style="display: none">
-               <label class="control-label col-sm-2">Id:</label>
+              <div class="form-group">
+               <label class="control-label col-sm-2">Id Setor:<span style='color:red'>*</span></label>
                <div class="col-sm-5">
-                  <input class="form-control" value= "<?=$func->idsetor?>" type="text" name="idsetor">
+                  <select class="form-control" name="idsetor">
+                    <?php while($setor = pg_fetch_object($setores)): ?>
+                      <?php if($setor->idsetor == $func->idsetor):?>
+                        <option selected="selected" value="<?=$setor->idsetor?>"><?=$setor->idsetor?></option>
+                      <?php endif; ?>
+                      <?php if($setor->idsetor != $func->idsetor):?>
+                        <option value="<?=$setor->idsetor?>"><?=$setor->idsetor?></option>
+                      <?php endif; ?>
+                    <?php endwhile; ?> 
+                  </select>
                </div>
             </div>
             <div class="panel-body">
-              <div class="form-group" style="display: none">
-               <label class="control-label col-sm-2">Id:</label>
+              <div class="form-group">
+               <label class="control-label col-sm-2">Id Filial:<span style='color:red'>*</span></label>
                <div class="col-sm-5">
-                  <input class="form-control" value= "<?=$func->idfilial?>" type="text" name="idfilial">
+                  <select class="form-control" name="idfilial">
+                    <?php while($filial = pg_fetch_object($filiais)): ?>
+                      <?php if($filial->idfilial == $func->idfilial):?>
+                        <option selected="selected" value="<?=$filial->idfilial?>"><?=$filial->idfilial?></option>
+                      <?php endif; ?>
+                      <?php if($filial->idfilial != $func->idfilial):?>
+                        <option value="<?=$filial->idfilial?>"><?=$filial->idfilial?></option>
+                      <?php endif; ?>
+                    <?php endwhile; ?> 
+                  </select>
                </div>
             </div>  
              <div class="form-group">

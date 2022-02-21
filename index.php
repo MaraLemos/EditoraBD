@@ -4,12 +4,12 @@ $funcionarios = $obj->getFuncionarios();
 $sn=1;
 if(isset($_POST['update'])){
     $func = $obj->getFuncionarioById();
-    $_SESSION['func'] = pg_fetch_object($funcionarios);
+    $_SESSION['func'] = pg_fetch_object($func);
     header('location:edit.php');
 }
 if(isset($_POST['delete'])){
    $ret_val = $obj->deleteFuncionario();
-   if($ret_val==1){
+   if($ret_val==9){
        
       echo "<script language='javascript'>";
       echo "alert('Funcionário removido com sucesso!'){

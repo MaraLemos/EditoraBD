@@ -2,13 +2,21 @@
 include_once('connection.php'); 
 class Db_Class{
 
+    function maxID(){
+        $id = pg_fetch_object(pg_query("SELECT MAX(p.idpessoa) FROM public.pessoa p"));
+        return (int) $id->max;
+    }
+
     function createFuncionario(){
 
-        $id = pg_query("SELECT COUNT(*) FROM public.pessoa");
+        $id = $this->maxID();
+        $id++;
 
-        pg_query("INSERT INTO public.pessoa VALUES('".$id."','".$this->cleanData($_POST['name'])."','".$this->cleanData($_POST['telefone'])."')");
+        if(!pg_query("INSERT INTO public.pessoa(idPessoa,nome,telefone) VALUES(".$id.",'".$this->cleanData($_POST['name'])."','".$this->cleanData($_POST['telefone'])."')")){
+            return null;
+        }
 
-        $sql = "INSERT INTO public.funcionario(idpessoa,cpf,datanasc,bonificacao,endereco,nis,datacontrato,cargo,salariobase,idsetor,idfilial) "."VALUES('".$id."','".$this->cleanData($_POST['cpf'])."','".$this->cleanData($_POST['datanasc'])."','".$this->cleanData($_POST['bonificacao'])."','".$this->cleanData($_POST['endereco'])."','".$this->cleanData($_POST['nis'])."','".$this->cleanData($_POST['datacontrato'])."','".$this->cleanData($_POST['cargo'])."',,'".$this->cleanData($_POST['salariobase'])."','".$this->cleanData($_POST['idsetor'])."','".$this->cleanData($_POST['idfilial'])."')";
+        $sql = "INSERT INTO public.funcionario(idpessoa,cpf,datanasc,bonificacao,endereco,nis,datacontrato,cargo,salariobase,idsetor,idfilial) "."VALUES(".$id.",'".$this->cleanData($_POST['cpf'])."','".$this->cleanData($_POST['datanasc'])."',".(float)$this->cleanData($_POST['bonificacao']).",'".$this->cleanData($_POST['endereco'])."','".$this->cleanData($_POST['nis'])."','".$this->cleanData($_POST['datacontrato'])."','".$this->cleanData($_POST['cargo'])."',".(float)$this->cleanData($_POST['salariobase']).",".(int)$this->cleanData($_POST['idsetor']).",".(int)$this->cleanData($_POST['idfilial']).")";
 
         return pg_affected_rows(pg_query($sql));
     }
@@ -20,7 +28,7 @@ class Db_Class{
 
     function getFuncionarioById(){    
   
-        $sql ="select *from public.pessoa p INNER JOIN public.funcionario f ON p.idPessoa = f.idPessoa where idPessoa=".(int)$this->cleanData($_POST['id']);
+        $sql ="select *from public.pessoa p INNER JOIN public.funcionario f ON p.idPessoa = f.idPessoa where p.idPessoa=".(int)$this->cleanData($_POST['id']);
         return pg_query($sql);
     } 
 

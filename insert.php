@@ -9,6 +9,8 @@ if($ret_val==1){
     echo '</script>';
 }
 }
+$setores = pg_query("SELECT s.idsetor FROM public.setor s");
+$filiais = pg_query("SELECT f.idfilial FROM public.filial f");
 ?>
 <div class="container-fluid bg-3 text-center">    
   <h3>CRUD de Exemplo</h3>
@@ -82,18 +84,26 @@ if($ret_val==1){
             </div>
             <div class="panel-body">
               <div class="form-group">
-               <label class="control-label col-sm-2">Id Setor:</label>
+               <label class="control-label col-sm-2">Id Setor:<span style='color:red'>*</span></label>
                <div class="col-sm-5">
-                  <input class="form-control" type="text" name="idsetor">
+                  <select class="form-control" name="idsetor">
+                    <?php while($setor = pg_fetch_object($setores)): ?>
+                      <option value="<?=$setor->idsetor?>"><?=$setor->idsetor?></option>
+                    <?php endwhile; ?> 
+                  </select>
                </div>
             </div>
             <div class="panel-body">
               <div class="form-group">
-               <label class="control-label col-sm-2">Id Filial:</label>
+               <label class="control-label col-sm-2">Id Filial:<span style='color:red'>*</span></label>
                <div class="col-sm-5">
-                  <input class="form-control" type="text" name="idfilial">
+                  <select class="form-control" name="idfilial">
+                    <?php while($filial = pg_fetch_object($filiais)): ?>
+                      <option value="<?=$filial->idfilial?>"><?=$filial->idfilial?></option>
+                    <?php endwhile; ?> 
+                  </select>
                </div>
-            </div>    
+            </div>     
              <div class="form-group">
                <label class="control-label col-sm-2">  </label>
                <div class="col-sm-5">
